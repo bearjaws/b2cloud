@@ -1,0 +1,29 @@
+{
+  "name": "b2cloud",
+  "version": "0.1.0",
+  "description": "Module for interacting with back blaze b2cloud api",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bearjaws/b2cloud.git"
+  },
+  "keywords": [
+    "b2cloud",
+    "back",
+    "blaze",
+    "API"
+  ],
+  "author": "Michael Bearjaws <michael.a.barajas@gmail.com>",
+  "license": "SEE LICENSE IN LICENSE file",
+  "bugs": {
+    "url": "https://github.com/bearjaws/b2cloud/issues"
+  },
+  "homepage": "https://github.com/bearjaws/b2cloud#readme",
+  "dependencies": {
+    "bluebird": "^3.1.1",
+    "request-promise": "^1.0.2"
+  }
+}
