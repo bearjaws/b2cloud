@@ -17,7 +17,7 @@ class Authorize {
   }
 
   // @todo cache this response for at least an hour
-  getBasicAuth() {
+  getBasicAuth(callback) {
     var options = {
       url: 'https://api.backblaze.com/b2api/v1/b2_authorize_account',
       headers: {
@@ -30,7 +30,7 @@ class Authorize {
       return auth;
     }).catch(function(err) {
       return bluebird.reject(err.error);
-    });
+    }).asCallback(callback);
   }
 }
 
