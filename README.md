@@ -15,7 +15,7 @@ i.e.
 
 Currently under active development
 
-### Whats implemented (from:  https://www.backblaze.com/b2/docs/b2_upload_file.html)
+### Whats implemented (from: https://www.backblaze.com/b2/docs/)
 
 - Authorize
   - b2_authorize_account
@@ -26,7 +26,14 @@ Currently under active development
   - b2_get_upload_url
 
 
+### Helpers
 
+- function getBucketByName(bucketName, callback)
+  - Retreives a bucket object by its name, rather than by bucketId
+- function uploadFile(filePath, bucketName, callback)
+  - Uploads a file
+
+## All methods are available as promises or callbacks.
 
 ## Please note this is being actively worked on and will soon support all API operations as listed here:
 https://www.backblaze.com/b2/docs/b2_upload_file.html
