@@ -2,7 +2,7 @@ var authorize = require('./authorize.js');
 var bucket = require('./bucket.js');
 var file = require('./file.js');
 var cache = {
-  authroize: {},
+  authorize: {},
   bucket: {},
   upload: {}
 };

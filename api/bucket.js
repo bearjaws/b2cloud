@@ -5,11 +5,14 @@ var fs = require('fs');
 var request = require('request-promise');
 
 var authorize = require('./authorize.js');
-var Authorize = new authorize();
 
 class Bucket {
+  constructor(cache) {
+    this.cache = cache;
+    this.Authorize = new authorize(cache);
+  }
   createBucket(name, type, callback) {
-    return Authorize.getBasicAuth().then(function(auth) {
+    return this.Authorize.getBasicAuth().then(function(auth) {
       var opts = {
         url: auth.apiUrl + '/b2api/v1/b2_create_bucket',
         headers: {
@@ -33,7 +36,7 @@ class Bucket {
   }
 
   listBuckets(callback) {
-    return Authorize.getBasicAuth().then(function(auth) {
+    return this.Authorize.getBasicAuth().then(function(auth) {
       var opts = {
         url: auth.apiUrl + '/b2api/v1/b2_list_buckets',
         headers: {
@@ -68,7 +71,7 @@ class Bucket {
     }).asCallback(callback);
   }
 
-  getBucketFiles(name, startFileName, maxFileCount, callback) {
+  listBucketFiles(name, startFileName, maxFileCount, callback) {
     // Make dealing with optional parameters easier
     if(typeof maxFileCount !== 'number') {
       maxFileCount = 100;
@@ -79,7 +82,7 @@ class Bucket {
     }
 
     var props = {
-      auth: Authorize.getBasicAuth(),
+      auth: this.Authorize.getBasicAuth(),
       bucket: this.getBucketByName(name)
     };
     return bluebird.props(props).then(function(res) {

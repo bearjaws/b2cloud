@@ -75,9 +75,44 @@ class Upload {
       });
     }).asCallback(callback);
   }
+
+  downloadFile(name, bucketName, savePath, range, callback) {
+    if(typeof range === 'function') {
+      callback = range;
+    }
+
+    return this.Authorize.getBasicAuth().then(function(auth) {
+      var url = auth.downloadUrl + "/file/" + bucketName + "/" + name;
+
+      var opts = {
+        url: url,
+        headers: {
+          Authorization: auth.authorizationToken,
+        },
+        method: 'GET'
+      };
+
+      if (typeof range === "object" && range !== null) {
+        opts.headers.range = "bytes=" + range.start + "-" + range.end
+      }
+
+      savePath = path.resolve(savePath);
+      return new bluebird(function(resolve, reject) {
+        var download = request(opts);
+        var headers;
+        download.on('response', function(res) {
+          headers = res.headers;
+          res.pipe(fs.createWriteStream(savePath));
+        });
+
+        download.on('end', function() {
+          return resolve(headers);
+        });
+      });
+
+    }).asCallback(callback);
+  }
 }
-
-
 
 // Returns a promise that resolves with the hex digest, otherwise rejects
 function getShaPromise(filePath) {
