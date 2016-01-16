@@ -13,7 +13,6 @@ i.e.
         "applicationKey": ""
 }`
 
-Currently under active development
 
 ### Whats implemented (from: https://www.backblaze.com/b2/docs/)
 
@@ -36,7 +35,7 @@ Currently under active development
 ## All methods are available as promises or callbacks.
 
 ## Please note this is being actively worked on and will soon support all API operations as listed here:
-https://www.backblaze.com/b2/docs/b2_upload_file.html
+https://www.backblaze.com/b2/docs/
 
 I also will be adding helpers methods such as uploadFile, getBucketByName to make it easier to use
 

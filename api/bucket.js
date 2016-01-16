@@ -67,7 +67,47 @@ class Bucket {
       return bluebird.resolve(theOne);
     }).asCallback(callback);
   }
+
+  getBucketFiles(name, startFileName, maxFileCount, callback) {
+    if(typeof maxFileCount !== 'number') {
+      maxFileCount = 100;
+    } else if(maxFileCount > 1000) {
+      maxFileCount = 1000;
+    } else if(maxFileCount < 1) {
+      maxFileCount = 1;
+    }
+    var props = {
+      auth: Authorize.getBasicAuth(),
+      bucket: this.getBucketByName(name)
+    };
+    return bluebird.props(props).then(function(res) {
+      var opts = {
+        url: res.auth.apiUrl + '/b2api/v1/b2_list_file_names',
+        headers: {
+          Authorization: res.auth.authorizationToken
+        },
+        body: {
+          bucketId: res.bucket.bucketId,
+          maxFileCount: maxFileCount
+        },
+        json: true,
+        method: 'POST'
+      };
+
+      if(startFileName !== null && typeof startFileName === "string") {
+        opts.body.startFileName = startFileName;
+      }
+
+      return request(opts).then(function(files) {
+        return files;
+      }).catch(function(err) {
+        bluebird.reject(err.error);
+      });
+    }).asCallback(callback);
+  }
+
 }
+
 
 
 module.exports = Bucket;

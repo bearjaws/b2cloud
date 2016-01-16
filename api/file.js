@@ -77,6 +77,8 @@ class Upload {
   }
 }
 
+
+
 // Returns a promise that resolves with the hex digest, otherwise rejects
 function getShaPromise(filePath) {
   return new bluebird(function(resolve, reject) {
