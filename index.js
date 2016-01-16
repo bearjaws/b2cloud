@@ -6,6 +6,7 @@ module.exports = {
   listBuckets: api.bucket.listBuckets,
   listBucketFiles: api.bucket.listBucketFiles,
   getBucketByName: api.bucket.getBucketByName,
-  getUploadUrl: api.upload.getUploadUrl,
-  uploadFile: api.upload.uploadFile
+  getUploadUrl: api.file.getUploadUrl,
+  uploadFile: api.file.uploadFile,
+  downloadFile: api.file.downloadFile
 };
