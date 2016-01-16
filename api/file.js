@@ -15,6 +15,12 @@ class Upload {
     this.Bucket = new bucket(cache);
   }
 
+  /**
+   * Gets the uploadUrl for uploadinga file to b2cloud
+   *
+   * @param {string} bucketName - Name of the bucket to get a uploadUrl for
+   * @param {function} [callback] - Optional callback
+   */
   getUploadUrl(bucketName, callback) {
     var _this = this;
     var props = {
@@ -40,8 +46,15 @@ class Upload {
     }).asCallback(callback);
   }
 
+  /**
+   * Helper function that automatically generates the uploadUrl, hashes the file and
+   * uploads it to b2cloud.
+   *
+   * @param {string} filePath - The file path to the file you want to upload
+   * @param {string} bucketName - The bucke to upload the file to.
+   * @param {function} [callback] - The optional callback
+   */
   uploadFile(filePath, bucketName, callback) {
-    var auth, url;
     var _this = this;
     var filename = path.basename(filePath);
 
@@ -76,6 +89,18 @@ class Upload {
     }).asCallback(callback);
   }
 
+  /**
+   * Downloads a file from b2cloud
+   *
+   * @param {string} name - Name of the file to download
+   * @param {string} bucketName - Bucket the file resides in
+   * @param {string} savePath - Path to save the file to
+   * @param {object} range - The range object used to fetch only a byte range, byte range is inclusive
+   * @param {number} range.start - The start byte to download
+   * @param {number} range.end - The end byte to download
+   * @see https://www.backblaze.com/b2/docs/b2_download_file_by_name.html
+   * @param {function} [callback] - The optional callback
+   */
   downloadFile(name, bucketName, savePath, range, callback) {
     if(typeof range === 'function') {
       callback = range;
