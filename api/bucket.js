@@ -11,6 +11,16 @@ class Bucket {
     this.cache = cache;
     this.Authorize = new authorize(cache);
   }
+
+  /**
+   * Creates a bucket in the b2cloud
+   *
+   * @param {string} name - Name of the bucket
+   * @param {string} type - Either allPublic or allPrivate, sets the bucket to public or private access.
+   * @param {function} [callback] - The optional callback
+   * @returns If no callback provided, retunrs a {Promise} that resolves to the bucket object.
+   * Otherwise returns the bucket {object}.
+   */
   createBucket(name, type, callback) {
     return this.Authorize.getBasicAuth().then(function(auth) {
       var opts = {
@@ -35,6 +45,13 @@ class Bucket {
     }).asCallback(callback);
   }
 
+  /**
+   * Lists all buckets you have created.
+   *
+   * @param {function} [callback] - The optional callback.
+   * @return If no callback is provided, returns a {Promise} that resolves to an {array} of bucket {objects}.
+   * Otherwise returns the {array} of bucket {objects}.
+   */
   listBuckets(callback) {
     return this.Authorize.getBasicAuth().then(function(auth) {
       var opts = {
@@ -71,6 +88,16 @@ class Bucket {
     }).asCallback(callback);
   }
 
+  /**
+   * Lists all files inside of a bucket.
+   *
+   * @param {string} name - The name of the bucket
+   * @param {string} [startFileName] - If the number of files exceeds the response limit, this will set
+   * which file to start listing from
+   * @param {number} [maxFileCount] - Max number of files to return, cannot be greater than 1000
+   * @see https://www.backblaze.com/b2/docs/b2_list_file_names.html
+   * @param {function} [callback] - The optional callback
+   */
   listBucketFiles(name, startFileName, maxFileCount, callback) {
     // Make dealing with optional parameters easier
     if(typeof maxFileCount !== 'number') {
@@ -85,6 +112,7 @@ class Bucket {
       auth: this.Authorize.getBasicAuth(),
       bucket: this.getBucketByName(name)
     };
+
     return bluebird.props(props).then(function(res) {
       var opts = {
         url: res.auth.apiUrl + '/b2api/v1/b2_list_file_names',
