@@ -4,7 +4,8 @@ var fs = require('fs');
 var request = require('request-promise');
 
 class Authorize {
-  constructor() {
+  constructor(cache) {
+    this.cache = cache;
     var  path = getUserHome() + "/.b2cloud.json";
     if(! fs.existsSync(path)) {
       throw new Error("Unable to load b2cloud.json from " + path);
@@ -16,8 +17,14 @@ class Authorize {
     return this.config;
   }
 
-  // @todo cache this response for at least an hour
   getBasicAuth(callback) {
+    var _this = this;
+    // Check if authorization has been cached
+    if (typeof this.cache.authorize === "object") {
+      if(this.cache.authorize.expires > new Date()) {
+        return bluebird.resolve(this.cache.authorize);
+      }
+    }
     var options = {
       url: 'https://api.backblaze.com/b2api/v1/b2_authorize_account',
       headers: {
@@ -27,6 +34,10 @@ class Authorize {
     };
 
     return request(options).then(function(auth) {
+      var date = new Date().getTime();
+      date += (2 * 60 * 60 * 1000);
+      auth.expires = new Date(date);
+      _this.cache.authorize = auth;
       return auth;
     }).catch(function(err) {
       return bluebird.reject(err.error);

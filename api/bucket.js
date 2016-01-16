@@ -5,11 +5,14 @@ var fs = require('fs');
 var request = require('request-promise');
 
 var authorize = require('./authorize.js');
-var Authorize = new authorize();
 
 class Bucket {
+  constructor(cache) {
+    this.cache = cache;
+    this.Authorize = new authorize(cache);
+  }
   createBucket(name, type, callback) {
-    return Authorize.getBasicAuth().then(function(auth) {
+    return this.Authorize.getBasicAuth().then(function(auth) {
       var opts = {
         url: auth.apiUrl + '/b2api/v1/b2_create_bucket',
         headers: {
@@ -33,7 +36,7 @@ class Bucket {
   }
 
   listBuckets(callback) {
-    return Authorize.getBasicAuth().then(function(auth) {
+    return this.Authorize.getBasicAuth().then(function(auth) {
       var opts = {
         url: auth.apiUrl + '/b2api/v1/b2_list_buckets',
         headers: {
@@ -67,7 +70,48 @@ class Bucket {
       return bluebird.resolve(theOne);
     }).asCallback(callback);
   }
+
+  listBucketFiles(name, startFileName, maxFileCount, callback) {
+    // Make dealing with optional parameters easier
+    if(typeof maxFileCount !== 'number') {
+      maxFileCount = 100;
+    } else if(maxFileCount > 1000) {
+      maxFileCount = 1000;
+    } else if(maxFileCount < 1) {
+      maxFileCount = 1;
+    }
+
+    var props = {
+      auth: this.Authorize.getBasicAuth(),
+      bucket: this.getBucketByName(name)
+    };
+    return bluebird.props(props).then(function(res) {
+      var opts = {
+        url: res.auth.apiUrl + '/b2api/v1/b2_list_file_names',
+        headers: {
+          Authorization: res.auth.authorizationToken
+        },
+        body: {
+          bucketId: res.bucket.bucketId,
+          maxFileCount: maxFileCount
+        },
+        json: true,
+        method: 'POST'
+      };
+
+      if(startFileName !== null && typeof startFileName === "string") {
+        opts.body.startFileName = startFileName;
+      }
+
+      return request(opts).then(function(files) {
+        return files;
+      }).catch(function(err) {
+        bluebird.reject(err.error);
+      });
+    }).asCallback(callback);
+  }
 }
+
 
 
 module.exports = Bucket;
