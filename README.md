@@ -141,4 +141,5 @@ b2cloud.createBucket(name, type, callback)
    * @see https://www.backblaze.com/b2/docs/b2_download_file_by_name.html
    * @param {function} [callback] - The optional callback
    */
+downloadFile(name, bucketName, savePath, range, callback)
 ```
