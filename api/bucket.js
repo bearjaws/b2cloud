@@ -69,6 +69,7 @@ class Bucket {
   }
 
   getBucketFiles(name, startFileName, maxFileCount, callback) {
+    // Make dealing with optional parameters easier
     if(typeof maxFileCount !== 'number') {
       maxFileCount = 100;
     } else if(maxFileCount > 1000) {
@@ -76,6 +77,7 @@ class Bucket {
     } else if(maxFileCount < 1) {
       maxFileCount = 1;
     }
+
     var props = {
       auth: Authorize.getBasicAuth(),
       bucket: this.getBucketByName(name)
@@ -105,7 +107,6 @@ class Bucket {
       });
     }).asCallback(callback);
   }
-
 }
 
 
