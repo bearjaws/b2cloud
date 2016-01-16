@@ -34,7 +34,7 @@ i.e.
   - Uploads a file
 - function downloadFile(name, bucketName, savePath, range, callback)
   - Downloads a file
-  - Range is an object with properties start and end
+  - Range is an optional object with properties start and end i.e. { start: 0, end: 1000 }
   - Range is number of bytes (inclusive) that will be downloaded
   - See b2 documentation https://www.backblaze.com/b2/docs/b2_download_file_by_name.html
 

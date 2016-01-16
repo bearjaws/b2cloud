@@ -4,7 +4,7 @@ var file = require('./file.js');
 var cache = {
   authorize: {},
   bucket: {},
-  upload: {}
+  file: {}
 };
 
 module.exports = {
