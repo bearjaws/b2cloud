@@ -28,6 +28,6 @@ node_modules
 
 .idea
 
-# Cache ignore
-cache/buckets.json
-cache/credentials.json
+.DS_Store
+#jsdoc
+artifacts

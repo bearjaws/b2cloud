@@ -13,18 +13,6 @@ i.e.
 }`
 
 
-### Whats implemented (from: https://www.backblaze.com/b2/docs/)
-
-- Authorize
-  - b2_authorize_account
-- Bucket
-  - b2_create_bucket
-  - b2_list_buckets
-  - b2_list_file_names
-- Upload
-  - b2_get_upload_url
-
-
 ### Helpers
 
 - function getBucketByName(bucketName, callback)
@@ -89,6 +77,17 @@ b2cloud.createBucket(name, type, callback)
    * Otherwise returns the {array} of bucket {objects}.
    */
    b2cloud.istBuckets(callback)
+```
+`function getBucketByName(name)`
+```
+/**
+   * Helper function that returns a bucket object by its name.
+   *
+   * @param {string} name - The name of the bucket.
+   * @param {function} [callback] - An optional callback
+   * @return A promise that resolves with the bucket object if found, otherwise rejects.
+   */
+   getBucketByName(name, callback)
 ```
 `function listBucketFiles(name)`
 ```
