@@ -7,6 +7,11 @@ var request = require('request-promise');
 var authorize = require('./authorize.js');
 
 class Bucket {
+
+  /**
+   *
+   * @param {object} cache - Cache object shared amongst classes.
+   */
   constructor(cache) {
     this.cache = cache;
     this.Authorize = new authorize(cache);
@@ -74,6 +79,13 @@ class Bucket {
     }).asCallback(callback);
   }
 
+  /**
+   * Helper function that returns a bucket object by its name.
+   *
+   * @param {string} name - The name of the bucket.
+   * @param {function} [callback] - An optional callback
+   * @return A promise that resolves with the bucket object if found, otherwise rejects.
+   */
   getBucketByName(name, callback) {
     // @todo caching
     return this.listBuckets(callback).then(function(buckets) {
@@ -83,7 +95,7 @@ class Bucket {
       if(theOne === null) {
         return bluebird.reject('The bucket `'+ name +'` does not exist.');
       }
-
+      _this.cache[name] = theOne;
       return bluebird.resolve(theOne);
     }).asCallback(callback);
   }
