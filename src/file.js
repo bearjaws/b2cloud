@@ -9,7 +9,13 @@ var crypto = require('crypto');
 var authorize = require('./authorize.js');
 var bucket = require('./bucket.js');
 
-class Upload {
+class File {
+
+  /**
+   * Class constructor, instantiates auth and bucket classes
+   *
+   * @param {object} cache - Cache object shared amongst classes.
+   */
   constructor(cache) {
     this.Authorize = new authorize(cache);
     this.Bucket = new bucket(cache);
@@ -156,4 +162,4 @@ function getShaPromise(filePath) {
   });
 }
 
-module.exports = Upload;
+module.exports = File;

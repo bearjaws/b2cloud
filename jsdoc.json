@@ -1,0 +1,5 @@
+{
+  "source": {
+    "include": ["src/authorize.js", "src/bucket.js", "src/file.js"]
+  }
+}

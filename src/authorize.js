@@ -4,6 +4,12 @@ var fs = require('fs');
 var request = require('request-promise');
 
 class Authorize {
+
+  /**
+   * Class constructor, reads in credentials and sets up caching
+   *
+   * @param {object} cache - Cache object shared amongst classes.
+   */
   constructor(cache) {
     this.cache = cache;
     var  path = getUserHome() + "/.b2cloud.json";
@@ -17,6 +23,13 @@ class Authorize {
     return this.config;
   }
 
+  /**
+   * Fetches an authenticated session for interacting with b2cloud.
+   *
+   * @param {function} [callback]
+   * @returns If no callback provided, returns a Promise that resolves to the auth response object.
+   * Otherwise returns the auth {object}.
+   * */
   getBasicAuth(callback) {
     var _this = this;
     // Check if authorization has been cached
