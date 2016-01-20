@@ -1,6 +1,6 @@
 {
   "name": "b2cloud",
-  "version": "0.2.3",
+  "version": "0.2.5",
   "description": "Module for interacting with back blaze b2cloud api",
   "main": "index.js",
   "scripts": {
@@ -31,5 +31,8 @@
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-jsdoc-to-markdown": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=4.0.0"
   }
 }

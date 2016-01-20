@@ -23,8 +23,7 @@ class Bucket {
    * @param {string} name - Name of the bucket
    * @param {string} type - Either allPublic or allPrivate, sets the bucket to public or private access.
    * @param {function} [callback] - The optional callback
-   * @returns If no callback provided, retunrs a {Promise} that resolves to the bucket object.
-   * Otherwise returns the bucket {object}.
+   * @returns {object} The response from b2_create_bucket
    */
   createBucket(name, type, callback) {
     return this.Authorize.getBasicAuth().then(function(auth) {
@@ -54,8 +53,7 @@ class Bucket {
    * Lists all buckets you have created.
    *
    * @param {function} [callback] - The optional callback.
-   * @return If no callback is provided, returns a {Promise} that resolves to an {array} of bucket {objects}.
-   * Otherwise returns the {array} of bucket {objects}.
+   * @returns {object} The response from b2_list_buckets
    */
   listBuckets(callback) {
     return this.Authorize.getBasicAuth().then(function(auth) {
@@ -84,7 +82,7 @@ class Bucket {
    *
    * @param {string} name - The name of the bucket.
    * @param {function} [callback] - An optional callback
-   * @return A promise that resolves with the bucket object if found, otherwise rejects.
+   * @return  {object} The response from b2_list_buckets
    */
   getBucketByName(name, callback) {
     // @todo caching
@@ -109,6 +107,7 @@ class Bucket {
    * @param {number} [maxFileCount] - Max number of files to return, cannot be greater than 1000
    * @see https://www.backblaze.com/b2/docs/b2_list_file_names.html
    * @param {function} [callback] - The optional callback
+   * @return {object} The response from b2_list_file_names
    */
   listBucketFiles(name, startFileName, maxFileCount, callback) {
     // Make dealing with optional parameters easier

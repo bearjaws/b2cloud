@@ -9,7 +9,13 @@ var crypto = require('crypto');
 var authorize = require('./authorize.js');
 var bucket = require('./bucket.js');
 
-class Upload {
+class File {
+
+  /**
+   * Class constructor, instantiates auth and bucket classes
+   *
+   * @param {object} cache - Cache object shared amongst classes.
+   */
   constructor(cache) {
     this.Authorize = new authorize(cache);
     this.Bucket = new bucket(cache);
@@ -20,6 +26,7 @@ class Upload {
    *
    * @param {string} bucketName - Name of the bucket to get a uploadUrl for
    * @param {function} [callback] - Optional callback
+   * @return {object} - The response from b2_get_upload_url
    */
   getUploadUrl(bucketName, callback) {
     var _this = this;
@@ -53,6 +60,7 @@ class Upload {
    * @param {string} filePath - The file path to the file you want to upload
    * @param {string} bucketName - The bucke to upload the file to.
    * @param {function} [callback] - The optional callback
+   * @return {object} - The newly created b2cloud object.
    */
   uploadFile(filePath, bucketName, callback) {
     var _this = this;
@@ -100,6 +108,7 @@ class Upload {
    * @param {number} range.end - The end byte to download
    * @see https://www.backblaze.com/b2/docs/b2_download_file_by_name.html
    * @param {function} [callback] - The optional callback
+   * @returns {Promsise} That resolves if the file is downloaded succesfully, otherwise rejects.
    */
   downloadFile(name, bucketName, savePath, range, callback) {
     if(typeof range === 'function') {
@@ -156,4 +165,4 @@ function getShaPromise(filePath) {
   });
 }
 
-module.exports = Upload;
+module.exports = File;
