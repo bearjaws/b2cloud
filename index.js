@@ -1,10 +1,6 @@
 var api = require('./src/index.js');
 
 
-return api.authorize.getBasicAuth().then(function(res) {
-  console.log(res);
-});
-
 module.exports = {
   authorizeAccount: api.authorize.getBasicAuth,
   createBucket: api.bucket.createBucket,

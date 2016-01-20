@@ -44,6 +44,16 @@ Setup a file ```.b2cloud``` in your home folder. Setup like this:,
 }
 ```
 ### Module Reference
+## Classes
+
+<dl>
+<dt><a href="#Authorize">Authorize</a></dt>
+<dd></dd>
+<dt><a href="#Bucket">Bucket</a></dt>
+<dd></dd>
+<dt><a href="#File">File</a></dt>
+<dd></dd>
+</dl>
 
 <a name="Authorize"></a>
 ## Authorize
@@ -51,7 +61,7 @@ Setup a file ```.b2cloud``` in your home folder. Setup like this:,
 
 * [Authorize](#Authorize)
     * [new Authorize(cache)](#new_Authorize_new)
-    * [.getBasicAuth([callback])](#Authorize+getBasicAuth) ⇒ <code>object</code>
+    * [.getBasicAuth([callback])](#Authorize+getBasicAuth) ⇒ <code>object</code> &#124; <code>string</code> &#124; <code>string</code> &#124; <code>string</code> &#124; <code>string</code>
 
 <a name="new_Authorize_new"></a>
 ### new Authorize(cache)
@@ -63,12 +73,11 @@ Class constructor, reads in credentials and sets up caching
 | cache | <code>object</code> | Cache object shared amongst classes. |
 
 <a name="Authorize+getBasicAuth"></a>
-### authorize.getBasicAuth([callback]) ⇒ <code>object</code>
+### authorize.getBasicAuth([callback]) ⇒ <code>object</code> &#124; <code>string</code> &#124; <code>string</code> &#124; <code>string</code> &#124; <code>string</code>
 Fetches an authenticated session for interacting with b2cloud.
 
 **Kind**: instance method of <code>[Authorize](#Authorize)</code>
-**Returns**: <code>object</code> - If no callback provided, returns a Promise that resolves to the auth response object.
-Otherwise returns the auth .
+**Returns**: <code>object</code> - auth Returns an authenticated session<code>string</code> - auth.accountId - The account ID this session belongs to.<code>string</code> - auth.apiUrl - The URL to use when performing further API requests.<code>string</code> - auth.authorizationTocken - The authorization token to be included in permission based requests.<code>string</code> - auth.downloadUrl - The URL to use when downoading objects.
 
 | Param | Type |
 | --- | --- |
@@ -80,10 +89,10 @@ Otherwise returns the auth .
 
 * [Bucket](#Bucket)
     * [new Bucket(cache)](#new_Bucket_new)
-    * [.createBucket(name, type, [callback])](#Bucket+createBucket) ⇒ <code>Promise</code>
-    * [.listBuckets([callback])](#Bucket+listBuckets) ⇒ <code>Promise</code>
-    * [.getBucketByName(name, [callback])](#Bucket+getBucketByName) ⇒
-    * [.listBucketFiles(name, [startFileName], [maxFileCount], [callback])](#Bucket+listBucketFiles)
+    * [.createBucket(name, type, [callback])](#Bucket+createBucket) ⇒ <code>object</code>
+    * [.listBuckets([callback])](#Bucket+listBuckets) ⇒ <code>object</code>
+    * [.getBucketByName(name, [callback])](#Bucket+getBucketByName) ⇒ <code>object</code>
+    * [.listBucketFiles(name, [startFileName], [maxFileCount], [callback])](#Bucket+listBucketFiles) ⇒ <code>object</code>
 
 <a name="new_Bucket_new"></a>
 ### new Bucket(cache)
@@ -93,12 +102,11 @@ Otherwise returns the auth .
 | cache | <code>object</code> | Cache object shared amongst classes. |
 
 <a name="Bucket+createBucket"></a>
-### bucket.createBucket(name, type, [callback]) ⇒ <code>Promise</code>
+### bucket.createBucket(name, type, [callback]) ⇒ <code>object</code>
 Creates a bucket in the b2cloud
 
 **Kind**: instance method of <code>[Bucket](#Bucket)</code>
-**Returns**: <code>Promise</code> - If no callback provided, retunrs a  that resolves to the bucket object.
-Otherwise returns the bucket {object}.
+**Returns**: <code>object</code> - The response from b2_create_bucket
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -107,23 +115,22 @@ Otherwise returns the bucket {object}.
 | [callback] | <code>function</code> | The optional callback |
 
 <a name="Bucket+listBuckets"></a>
-### bucket.listBuckets([callback]) ⇒ <code>Promise</code>
+### bucket.listBuckets([callback]) ⇒ <code>object</code>
 Lists all buckets you have created.
 
 **Kind**: instance method of <code>[Bucket](#Bucket)</code>
-**Returns**: <code>Promise</code> - If no callback is provided, returns a  that resolves to an {array} of bucket {objects}.
-Otherwise returns the {array} of bucket {objects}.
+**Returns**: <code>object</code> - The response from b2_list_buckets
 
 | Param | Type | Description |
 | --- | --- | --- |
 | [callback] | <code>function</code> | The optional callback. |
 
 <a name="Bucket+getBucketByName"></a>
-### bucket.getBucketByName(name, [callback]) ⇒
+### bucket.getBucketByName(name, [callback]) ⇒ <code>object</code>
 Helper function that returns a bucket object by its name.
 
 **Kind**: instance method of <code>[Bucket](#Bucket)</code>
-**Returns**: A promise that resolves with the bucket object if found, otherwise rejects.
+**Returns**: <code>object</code> - The response from b2_list_buckets
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -131,10 +138,11 @@ Helper function that returns a bucket object by its name.
 | [callback] | <code>function</code> | An optional callback |
 
 <a name="Bucket+listBucketFiles"></a>
-### bucket.listBucketFiles(name, [startFileName], [maxFileCount], [callback])
+### bucket.listBucketFiles(name, [startFileName], [maxFileCount], [callback]) ⇒ <code>object</code>
 Lists all files inside of a bucket.
 
 **Kind**: instance method of <code>[Bucket](#Bucket)</code>
+**Returns**: <code>object</code> - The response from b2_list_file_names
 **See**: https://www.backblaze.com/b2/docs/b2_list_file_names.html
 
 | Param | Type | Description |
@@ -150,9 +158,9 @@ Lists all files inside of a bucket.
 
 * [File](#File)
     * [new File(cache)](#new_File_new)
-    * [.getUploadUrl(bucketName, [callback])](#File+getUploadUrl)
-    * [.uploadFile(filePath, bucketName, [callback])](#File+uploadFile)
-    * [.downloadFile(name, bucketName, savePath, range, [callback])](#File+downloadFile)
+    * [.getUploadUrl(bucketName, [callback])](#File+getUploadUrl) ⇒ <code>object</code>
+    * [.uploadFile(filePath, bucketName, [callback])](#File+uploadFile) ⇒ <code>object</code>
+    * [.downloadFile(name, bucketName, savePath, range, [callback])](#File+downloadFile) ⇒ <code>Promsise</code>
 
 <a name="new_File_new"></a>
 ### new File(cache)
@@ -164,10 +172,11 @@ Class constructor, instantiates auth and bucket classes
 | cache | <code>object</code> | Cache object shared amongst classes. |
 
 <a name="File+getUploadUrl"></a>
-### file.getUploadUrl(bucketName, [callback])
+### file.getUploadUrl(bucketName, [callback]) ⇒ <code>object</code>
 Gets the uploadUrl for uploadinga file to b2cloud
 
 **Kind**: instance method of <code>[File](#File)</code>
+**Returns**: <code>object</code> - - The response from b2_get_upload_url
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -175,11 +184,12 @@ Gets the uploadUrl for uploadinga file to b2cloud
 | [callback] | <code>function</code> | Optional callback |
 
 <a name="File+uploadFile"></a>
-### file.uploadFile(filePath, bucketName, [callback])
+### file.uploadFile(filePath, bucketName, [callback]) ⇒ <code>object</code>
 Helper function that automatically generates the uploadUrl, hashes the file and
 uploads it to b2cloud.
 
 **Kind**: instance method of <code>[File](#File)</code>
+**Returns**: <code>object</code> - - The newly created b2cloud object.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -188,10 +198,11 @@ uploads it to b2cloud.
 | [callback] | <code>function</code> | The optional callback |
 
 <a name="File+downloadFile"></a>
-### file.downloadFile(name, bucketName, savePath, range, [callback])
+### file.downloadFile(name, bucketName, savePath, range, [callback]) ⇒ <code>Promsise</code>
 Downloads a file from b2cloud
 
 **Kind**: instance method of <code>[File](#File)</code>
+**Returns**: <code>Promsise</code> - That resolves if the file is downloaded succesfully, otherwise rejects.
 **See**: https://www.backblaze.com/b2/docs/b2_download_file_by_name.html
 
 | Param | Type | Description |
@@ -203,6 +214,4 @@ Downloads a file from b2cloud
 | range.start | <code>number</code> | The start byte to download |
 | range.end | <code>number</code> | The end byte to download |
 | [callback] | <code>function</code> | The optional callback |
-
-
 

@@ -3,7 +3,7 @@ module.exports = function (grunt) {
   grunt.initConfig({
     jsdoc2md: {
       oneOutputFile: {
-        src: 'api/bucket.js',
+        src: 'src/*.js',
         dest: 'artifacts/documentation.md'
       }
     }
