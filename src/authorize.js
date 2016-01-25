@@ -14,10 +14,17 @@ function getUserHome() {
 function Authorize(cache) {
   this.cache = cache;
   var  path = getUserHome() + "/.b2cloud.json";
-  if(! fs.existsSync(path)) {
-    throw new Error("Unable to load b2cloud.json from " + path);
+  if(typeof process.env.B2_ACCOUNT_ID === 'string') {
+    this.config = {
+      accountId: process.env.B2_ACCOUNT_ID,
+      applicationKey: process.env.B2_APPLICATION_KEY
+    };
+  } else {
+    if(! fs.existsSync(path)) {
+      throw new Error("Unable to load b2cloud.json from " + path);
+    }
+    this.config = require(path);
   }
-  this.config = require(path);
 }
 
 /**
