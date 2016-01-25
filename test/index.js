@@ -7,6 +7,7 @@ describe('B2Cloud', function() {
     var time;
 
     it('should authorize with b2cloud using promises', function (done) {
+      this.timeout(5000);
       return b2cloud.auth.getBasicAuth().then(function (res) {
         expect(res).to.only.have.keys('accountId', 'apiUrl', 'authorizationToken', 'downloadUrl', 'expires');
         done();
@@ -15,6 +16,7 @@ describe('B2Cloud', function() {
     });
 
     it('should authorize with b2cloud using a callback', function (done) {
+      this.timeout(5000);
       b2cloud.auth.getBasicAuth(function(err, auth) {
         expect(auth).to.only.have.keys('accountId', 'apiUrl', 'authorizationToken', 'downloadUrl', 'expires');
         done();
@@ -37,6 +39,7 @@ describe('B2Cloud', function() {
     var startTime;
 
     before(function(done) {
+      this.timeout(5000);
       require('crypto').randomBytes(8, function (ex, buf) {
         bucketName = buf.toString('hex');
         return b2cloud.bucket.createBucket(bucketName, 'allPublic').then(function (res) {
@@ -47,6 +50,7 @@ describe('B2Cloud', function() {
     });
 
     after(function(done) {
+      this.timeout(5000);
       return b2cloud.bucket.deleteBucket(bucket.bucketId).then(function() {
         done();
       });
@@ -72,6 +76,7 @@ describe('B2Cloud', function() {
     });
 
     it('should be able to get a bucket object by bucket name', function(done) {
+      this.timeout(5000);
       return b2cloud.bucket.getBucketByName(bucketName).then(function(res) {
         startTime = new Date();
         done();
@@ -79,6 +84,7 @@ describe('B2Cloud', function() {
     });
 
     it('should use bucket cache when fetching buckets by name', function(done) {
+      this.timeout(5000);
       return b2cloud.bucket.getBucketByName(bucketName).then(function(res) {
         expect(new Date() - startTime).to.be.below(20);
         done();
@@ -90,6 +96,7 @@ describe('B2Cloud', function() {
     var bucketName;
     var bucket;
     before(function(done) {
+      this.timeout(5000);
       require('crypto').randomBytes(8, function (ex, buf) {
         bucketName = buf.toString('hex');
         return b2cloud.bucket.createBucket(bucketName, 'allPublic').then(function (res) {
@@ -100,12 +107,14 @@ describe('B2Cloud', function() {
     });
 
     after(function(done) {
+      this.timeout(5000);
       return b2cloud.bucket.deleteBucket(bucket.bucketId).then(function() {
         done();
       });
     });
 
     it('should be able to get a uploadUrl by bucketName', function (done) {
+      this.timeout(5000);
       return b2cloud.file.getUploadUrl(bucketName).then(function(res) {
         expect(res).to.only.have.keys('authorizationToken', 'bucketId', 'uploadUrl');
         done();
