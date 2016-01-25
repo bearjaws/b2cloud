@@ -43,7 +43,21 @@ Setup a file ```.b2cloud``` in your home folder. Setup like this:,
         "applicationKey": ""
 }
 ```
-### Module Reference
+
+#### Usage Example:
+
+```
+
+    var b2cloud = require('b2cloud');
+
+    return b2cloud.authorize.getBasicAuth(function(auth) {
+
+        console.log('authenticated', auth);
+
+    });
+
+```
+
 ## Classes
 
 <dl>
@@ -61,23 +75,30 @@ Setup a file ```.b2cloud``` in your home folder. Setup like this:,
 
 * [Authorize](#Authorize)
     * [new Authorize(cache)](#new_Authorize_new)
-    * [.getBasicAuth([callback])](#Authorize+getBasicAuth) ⇒ <code>object</code> &#124; <code>string</code> &#124; <code>string</code> &#124; <code>string</code> &#124; <code>string</code>
+    * [.getBasicAuth([callback])](#Authorize+getBasicAuth) ⇒ <code>object</code>
 
 <a name="new_Authorize_new"></a>
 ### new Authorize(cache)
-Class constructor, reads in credentials and sets up caching
 
-
-| Param | Type | Description |
-| --- | --- | --- |
-| cache | <code>object</code> | Cache object shared amongst classes. |
+| Param | Type |
+| --- | --- |
+| cache | <code>object</code> |
 
 <a name="Authorize+getBasicAuth"></a>
-### authorize.getBasicAuth([callback]) ⇒ <code>object</code> &#124; <code>string</code> &#124; <code>string</code> &#124; <code>string</code> &#124; <code>string</code>
+### authorize.getBasicAuth([callback]) ⇒ <code>object</code>
 Fetches an authenticated session for interacting with b2cloud.
 
 **Kind**: instance method of <code>[Authorize](#Authorize)</code>
-**Returns**: <code>object</code> - auth Returns an authenticated session<code>string</code> - auth.accountId - The account ID this session belongs to.<code>string</code> - auth.apiUrl - The URL to use when performing further API requests.<code>string</code> - auth.authorizationTocken - The authorization token to be included in permission based requests.<code>string</code> - auth.downloadUrl - The URL to use when downoading objects.
+**Returns**: <code>object</code> - auth Returns an authenticated session
+
+<code>string</code> - auth.accountId - The account ID this session belongs to.
+
+<code>string</code> - auth.apiUrl - The URL to use when performing further API requests.
+
+<code>string</code> - auth.authorizationTocken - The authorization token to be included in permission based requests.
+
+<code>string</code> - auth.downloadUrl - The URL to use when downoading objects.
+
 
 | Param | Type |
 | --- | --- |
@@ -90,6 +111,7 @@ Fetches an authenticated session for interacting with b2cloud.
 * [Bucket](#Bucket)
     * [new Bucket(cache)](#new_Bucket_new)
     * [.createBucket(name, type, [callback])](#Bucket+createBucket) ⇒ <code>object</code>
+    * [.deleteBucket(bucketId, [callback])](#Bucket+deleteBucket) ⇒ <code>object</code>
     * [.listBuckets([callback])](#Bucket+listBuckets) ⇒ <code>object</code>
     * [.getBucketByName(name, [callback])](#Bucket+getBucketByName) ⇒ <code>object</code>
     * [.listBucketFiles(name, [startFileName], [maxFileCount], [callback])](#Bucket+listBucketFiles) ⇒ <code>object</code>
@@ -99,7 +121,7 @@ Fetches an authenticated session for interacting with b2cloud.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| cache | <code>object</code> | Cache object shared amongst classes. |
+| cache | <code>object</code> | Object used for caching requests. |
 
 <a name="Bucket+createBucket"></a>
 ### bucket.createBucket(name, type, [callback]) ⇒ <code>object</code>
@@ -112,6 +134,18 @@ Creates a bucket in the b2cloud
 | --- | --- | --- |
 | name | <code>string</code> | Name of the bucket |
 | type | <code>string</code> | Either allPublic or allPrivate, sets the bucket to public or private access. |
+| [callback] | <code>function</code> | The optional callback |
+
+<a name="Bucket+deleteBucket"></a>
+### bucket.deleteBucket(bucketId, [callback]) ⇒ <code>object</code>
+Deletes a bucket from the b2cloud
+
+**Kind**: instance method of <code>[Bucket](#Bucket)</code>
+**Returns**: <code>object</code> - The response from b2_create_bucket
+
+| Param | Type | Description |
+| --- | --- | --- |
+| bucketId | <code>string</code> | BucketId as recieved from listBuckets or getBucketByName |
 | [callback] | <code>function</code> | The optional callback |
 
 <a name="Bucket+listBuckets"></a>
