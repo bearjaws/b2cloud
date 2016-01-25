@@ -3,6 +3,7 @@ var expect = require('expect.js');
 var assert = require('assert');
 
 describe('B2Cloud', function() {
+  this.timeout(20000);
   describe('Auth', function () {
     var time;
 
@@ -16,7 +17,6 @@ describe('B2Cloud', function() {
     });
 
     it('should authorize with b2cloud using a callback', function (done) {
-      this.timeout(5000);
       b2cloud.auth.getBasicAuth(function(err, auth) {
         expect(auth).to.only.have.keys('accountId', 'apiUrl', 'authorizationToken', 'downloadUrl', 'expires');
         done();
@@ -35,25 +35,31 @@ describe('B2Cloud', function() {
 
     var bucketName;
     var bucket;
+    var file;
     // Used for caching test
     var startTime;
 
     before(function(done) {
-      this.timeout(5000);
+      this.timeout(15000);
       require('crypto').randomBytes(8, function (ex, buf) {
-        bucketName = buf.toString('hex');
+        bucketName = "test" + buf.toString('hex');
         return b2cloud.bucket.createBucket(bucketName, 'allPublic').then(function (res) {
           bucket = res;
+          return b2cloud.file.uploadFile('./test/data/backblaze-logo.gif', bucketName);
+        }).then(function(res) {
+          file = res;
           done();
         });
       });
     });
 
     after(function(done) {
-      this.timeout(5000);
-      return b2cloud.bucket.deleteBucket(bucket.bucketId).then(function() {
+      this.timeout(15000);
+      return b2cloud.file.deleteFileVersion(file.fileName, file.fileId).then(function() {
+        return b2cloud.bucket.deleteBucket(bucket.bucketId)
+      }).then(function() {
         done();
-      });
+      })
     });
 
     it('should create and delete bucket with b2cloud using promises', function (done) {
@@ -78,15 +84,24 @@ describe('B2Cloud', function() {
     it('should be able to get a bucket object by bucket name', function(done) {
       this.timeout(5000);
       return b2cloud.bucket.getBucketByName(bucketName).then(function(res) {
+        expect(res).to.eql(bucket);
         startTime = new Date();
         done();
       });
     });
 
     it('should use bucket cache when fetching buckets by name', function(done) {
-      this.timeout(5000);
       return b2cloud.bucket.getBucketByName(bucketName).then(function(res) {
         expect(new Date() - startTime).to.be.below(20);
+        done();
+      });
+    });
+
+    it('should list all files inside a bucket', function(done) {
+      this.timeout(5000);
+      return b2cloud.bucket.listBucketFiles(bucketName).then(function(res) {
+        expect(res.files.length).to.eql(1);
+        expect(res.files[0].fileId).to.eql(file.fileId);
         done();
       });
     });
@@ -107,7 +122,6 @@ describe('B2Cloud', function() {
     });
 
     after(function(done) {
-      this.timeout(5000);
       return b2cloud.bucket.deleteBucket(bucket.bucketId).then(function() {
         done();
       });
@@ -117,6 +131,18 @@ describe('B2Cloud', function() {
       this.timeout(5000);
       return b2cloud.file.getUploadUrl(bucketName).then(function(res) {
         expect(res).to.only.have.keys('authorizationToken', 'bucketId', 'uploadUrl');
+        done();
+      });
+    });
+
+    it('should be able to upload and delete a file', function(done) {
+      this.timeout(25000);
+      var file;
+      return b2cloud.file.uploadFile('./test/data/backblaze-logo.gif', bucketName).then(function(res) {
+        file = res;
+        return b2cloud.file.deleteFileVersion(res.fileName, res.fileId);
+      }).then(function(res) {
+        expect(res.fileId).to.eql(file.fileId);
         done();
       });
     });
