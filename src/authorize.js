@@ -32,10 +32,6 @@ function Authorize(cache) {
  *
  * @param {function} [callback]
  * @returns {object} auth Returns an authenticated session
- * @returns {string} auth.accountId - The account ID this session belongs to.
- * @returns {string} auth.apiUrl - The URL to use when performing further API requests.
- * @returns {string} auth.authorizationTocken - The authorization token to be included in permission based requests.
- * @returns {string} auth.downloadUrl - The URL to use when downoading objects.
  * */
 Authorize.prototype.getBasicAuth = function(callback) {
   var _this = this;

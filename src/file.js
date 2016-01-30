@@ -105,9 +105,9 @@ File.prototype.uploadFile = function(filePath, bucketName, callback) {
     return new bluebird(function(resolve, reject) {
       fs.createReadStream(filePath).pipe(request(opts, function(err, res) {
         if(res.statusCode === 200) {
-          resolve(res.body);
+          resolve(JSON.parse(res.body));
         } else {
-          reject(res.body);
+          reject(JSON.parse(res.body));
         }
       }));
     });
@@ -160,8 +160,34 @@ File.prototype.downloadFile = function(name, bucketName, savePath, range, callba
         return resolve(headers);
       });
     });
-
   }).asCallback(callback);
 };
 
+/**
+ * Deletes a specific version of a file from b2cloud.
+ *
+ * @param {string} fileName - Name of the file to delete.
+ * @param {string} fileId - The unique fileid to delete
+ * @param {function} [callback] - Optional callback
+ * @returns {*}
+ */
+File.prototype.deleteFileVersion = function(fileName, fileId, callback) {
+  return this.Authorize.getBasicAuth().then(function(auth) {
+    var opts = {
+      url: auth.apiUrl + '/b2api/v1/b2_delete_file_version',
+      headers: {
+        Authorization: auth.authorizationToken
+      },
+      body: {
+        fileName: fileName,
+        fileId: fileId
+      },
+      json: true,
+      method: 'POST'
+    };
+    return rp(opts);
+  }).catch(function(err) {
+    return bluebird.reject(err.error);
+  }).asCallback(callback);
+};
 module.exports = File;
