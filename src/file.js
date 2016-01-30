@@ -163,6 +163,14 @@ File.prototype.downloadFile = function(name, bucketName, savePath, range, callba
   }).asCallback(callback);
 };
 
+/**
+ * Deletes a specific version of a file from b2cloud.
+ *
+ * @param {string} fileName - Name of the file to delete.
+ * @param {string} fileId - The unique fileid to delete
+ * @param {function} [callback] - Optional callback
+ * @returns {*}
+ */
 File.prototype.deleteFileVersion = function(fileName, fileId, callback) {
   return this.Authorize.getBasicAuth().then(function(auth) {
     var opts = {

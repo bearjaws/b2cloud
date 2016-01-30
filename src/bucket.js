@@ -146,6 +146,9 @@ Bucket.prototype.getBucketByName = function(name, callback) {
  */
 Bucket.prototype.listBucketFiles = function(name, startFileName, maxFileCount, callback) {
   // Make dealing with optional parameters easier
+  if(typeof startFileName === 'function') {
+    callback = startFileName;
+  }
   if(typeof maxFileCount !== 'number') {
     maxFileCount = 100;
   } else if(maxFileCount > 1000) {

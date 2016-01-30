@@ -91,15 +91,6 @@ Fetches an authenticated session for interacting with b2cloud.
 **Kind**: instance method of <code>[Authorize](#Authorize)</code>
 **Returns**: <code>object</code> - auth Returns an authenticated session
 
-<code>string</code> - auth.accountId - The account ID this session belongs to.
-
-<code>string</code> - auth.apiUrl - The URL to use when performing further API requests.
-
-<code>string</code> - auth.authorizationTocken - The authorization token to be included in permission based requests.
-
-<code>string</code> - auth.downloadUrl - The URL to use when downoading objects.
-
-
 | Param | Type |
 | --- | --- |
 | [callback] | <code>function</code> |
@@ -195,6 +186,7 @@ Lists all files inside of a bucket.
     * [.getUploadUrl(bucketName, [callback])](#File+getUploadUrl) ⇒ <code>object</code>
     * [.uploadFile(filePath, bucketName, [callback])](#File+uploadFile) ⇒ <code>object</code>
     * [.downloadFile(name, bucketName, savePath, range, [callback])](#File+downloadFile) ⇒ <code>Promsise</code>
+    * [.deleteFileVersion(fileName, fileId, [callback])](#File+deleteFileVersion) ⇒ <code>\*</code>
 
 <a name="new_File_new"></a>
 ### new File(cache)
@@ -248,4 +240,16 @@ Downloads a file from b2cloud
 | range.start | <code>number</code> | The start byte to download |
 | range.end | <code>number</code> | The end byte to download |
 | [callback] | <code>function</code> | The optional callback |
+
+<a name="File+deleteFileVersion"></a>
+### file.deleteFileVersion(fileName, fileId, [callback]) ⇒ <code>\*</code>
+Deletes a specific version of a file from b2cloud.
+
+**Kind**: instance method of <code>[File](#File)</code>
+
+| Param | Type | Description |
+| --- | --- | --- |
+| fileName | <code>string</code> | Name of the file to delete. |
+| fileId | <code>string</code> | The unique fileid to delete |
+| [callback] | <code>function</code> | Optional callback |
 

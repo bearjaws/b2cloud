@@ -90,6 +90,14 @@ describe('B2Cloud', function() {
       });
     });
 
+    it('should be able to get a bucket object by bucket name using a callback', function(done) {
+      this.timeout(5000);
+      return b2cloud.bucket.getBucketByName(bucketName, function(err, res) {
+        expect(res).to.eql(bucket);
+        done();
+      });
+    });
+
     it('should use bucket cache when fetching buckets by name', function(done) {
       return b2cloud.bucket.getBucketByName(bucketName).then(function(res) {
         expect(new Date() - startTime).to.be.below(20);
@@ -97,9 +105,18 @@ describe('B2Cloud', function() {
       });
     });
 
-    it('should list all files inside a bucket', function(done) {
+    it('should list all files inside a bucket using a promise', function(done) {
       this.timeout(5000);
       return b2cloud.bucket.listBucketFiles(bucketName).then(function(res) {
+        expect(res.files.length).to.eql(1);
+        expect(res.files[0].fileId).to.eql(file.fileId);
+        done();
+      });
+    });
+
+    it('should list all files inside a bucket using a callback', function(done) {
+      this.timeout(5000);
+      return b2cloud.bucket.listBucketFiles(bucketName, function(err, res) {
         expect(res.files.length).to.eql(1);
         expect(res.files[0].fileId).to.eql(file.fileId);
         done();
@@ -145,6 +162,27 @@ describe('B2Cloud', function() {
         expect(res.fileId).to.eql(file.fileId);
         done();
       });
+    });
+
+    it('should be able to upload, download and delete a file', function(done) {
+      this.timeout(25000);
+      var file;
+      var fs = require('fs');
+      return b2cloud.file.uploadFile('./test/data/backblaze-logo.gif', bucketName).then(function(res) {
+        file = res;
+        return b2cloud.file.downloadFile(file.fileName, bucketName, '/tmp/backblaze.gif', {
+          start:0,
+          end: 99
+        });
+      }).then(function() {
+        return b2cloud.file.deleteFileVersion(file.fileName, file.fileId);
+      }).then(function(res) {
+        expect(res.fileId).to.eql(file.fileId);
+        done();
+      }).catch(function(err) {
+        console.warn(err);
+        done();
+      })
     });
   });
 });
