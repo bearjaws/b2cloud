@@ -1,5 +1,5 @@
 # B2Cloud
-
+[![Circle CI](https://circleci.com/gh/bearjaws/b2cloud/tree/master.svg?style=svg)](https://circleci.com/gh/bearjaws/b2cloud/tree/master)
 ## A module for interacting with Back Blaze B2Cloud
 
 ### Configuration
