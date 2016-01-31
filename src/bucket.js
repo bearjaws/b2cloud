@@ -145,9 +145,10 @@ Bucket.prototype.getBucketByName = function(name, callback) {
  * @return {object} The response from b2_list_file_names
  */
 Bucket.prototype.listBucketFiles = function(name, startFileName, maxFileCount, callback) {
-  // Make dealing with optional parameters easier
+  // Make dealing with optional parameters easier, also crankshaft cannot optimize assignments to function arguments
+  var localCallback = callback;
   if(typeof startFileName === 'function') {
-    callback = startFileName;
+    localCallback = startFileName;
   }
   if(typeof maxFileCount !== 'number') {
     maxFileCount = 100;
@@ -185,7 +186,7 @@ Bucket.prototype.listBucketFiles = function(name, startFileName, maxFileCount, c
     }).catch(function(err) {
       bluebird.reject(err.error);
     });
-  }).asCallback(callback);
+  }).asCallback(localCallback);
 };
 
 
