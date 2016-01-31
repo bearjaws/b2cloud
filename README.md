@@ -47,15 +47,12 @@ Setup a file ```.b2cloud``` in your home folder. Setup like this:,
 #### Usage Example:
 
 ```
-
     var b2cloud = require('b2cloud');
 
-    return b2cloud.authorize.getBasicAuth(function(auth) {
-
+    return b2cloud.authorize.getBasicAuth().then(function(auth) {
         console.log('authenticated', auth);
 
     });
-
 ```
 
 ## Classes
