@@ -1,6 +1,6 @@
 {
   "name": "b2cloud",
-  "version": "0.4.1",
+  "version": "0.5.1",
   "description": "Module for interacting with back blaze b2cloud api",
   "main": "index.js",
   "scripts": {
