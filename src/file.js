@@ -48,8 +48,8 @@ function File(cache) {
 File.prototype.getUploadUrl = function(bucketName, callback) {
   var _this = this;
   var props = {
-    auth: this.Authorize.getBasicAuth(callback),
-    bucket: this.Bucket.getBucketByName(bucketName, callback)
+    auth: this.Authorize.getBasicAuth(),
+    bucket: this.Bucket.getBucketByName(bucketName)
   };
 
   return bluebird.props(props).then(function(res) {
@@ -76,12 +76,18 @@ File.prototype.getUploadUrl = function(bucketName, callback) {
  *
  * @param {string} filePath - The file path to the file you want to upload
  * @param {string} bucketName - The bucke to upload the file to.
+ * @param {string} [contentType] - The content type of the data, can be left empty to auto determine content type.
  * @param {function} [callback] - The optional callback
  * @return {object} - The newly created b2cloud object.
  */
-File.prototype.uploadFile = function(filePath, bucketName, callback) {
+File.prototype.uploadFile = function(filePath, bucketName, contentType, callback) {
   var _this = this;
   var filename = path.basename(filePath);
+  var localCallback = callback;
+  if(typeof contentType === 'function' && typeof callback ==='undefined') {
+    localCallback = contentType;
+    contentType = null;
+  }
 
   var props = {
     url: _this.getUploadUrl(bucketName, callback),
@@ -95,9 +101,9 @@ File.prototype.uploadFile = function(filePath, bucketName, callback) {
       headers: {
         Authorization: res.url.authorizationToken,
         "X-Bz-File-Name": filename,
-        "Content-Type": "b2/x-auto", // @todo allow content-type to be specified
+        "Content-Type": contentType === null ? "b2/x-auto" : contentType,
         "Content-Length": res.stats.size,
-        "X-Bz-Content-Sha1": res.hash,
+        "X-Bz-Content-Sha1": res.hash
       },
       method: 'POST'
     };
@@ -111,7 +117,7 @@ File.prototype.uploadFile = function(filePath, bucketName, callback) {
         }
       }));
     });
-  }).asCallback(callback);
+  }).asCallback(localCallback);
 };
 
 /**
@@ -128,8 +134,9 @@ File.prototype.uploadFile = function(filePath, bucketName, callback) {
  * @returns {Promsise} That resolves if the file is downloaded succesfully, otherwise rejects.
  */
 File.prototype.downloadFile = function(name, bucketName, savePath, range, callback) {
-  if(typeof range === 'function') {
-    callback = range;
+  var localCallback = callback;
+  if(typeof range === 'function' && typeof localCallback === 'undefined') {
+    localCallback = range;
   }
 
   return this.Authorize.getBasicAuth().then(function(auth) {
@@ -160,7 +167,7 @@ File.prototype.downloadFile = function(name, bucketName, savePath, range, callba
         return resolve(headers);
       });
     });
-  }).asCallback(callback);
+  }).asCallback(localCallback);
 };
 
 /**

@@ -59,12 +59,15 @@ describe('B2Cloud', function() {
         return b2cloud.bucket.deleteBucket(bucket.bucketId)
       }).then(function() {
         done();
+      }).catch(function(err) {
+        console.warn('could not delete files out of bucket');
+        done();
       })
     });
 
     it('should create and delete bucket with b2cloud using promises', function (done) {
       // These operations can be quite slow.
-      this.timeout(5000);
+      this.timeout(10000);
       require('crypto').randomBytes(8, function(ex, buf) {
         var bucketName = buf.toString('hex');
         var testBucket;
@@ -128,7 +131,7 @@ describe('B2Cloud', function() {
     var bucketName;
     var bucket;
     before(function(done) {
-      this.timeout(5000);
+      this.timeout(10000);
       require('crypto').randomBytes(8, function (ex, buf) {
         bucketName = buf.toString('hex');
         return b2cloud.bucket.createBucket(bucketName, 'allPublic').then(function (res) {
@@ -152,6 +155,14 @@ describe('B2Cloud', function() {
       });
     });
 
+    it('should be able to get a uploadUrl by bucketName using a callback', function (done) {
+      this.timeout(5000);
+      return b2cloud.file.getUploadUrl(bucketName, function(err, res) {
+        expect(res).to.only.have.keys('authorizationToken', 'bucketId', 'uploadUrl');
+        done();
+      });
+    });
+
     it('should be able to upload and delete a file', function(done) {
       this.timeout(25000);
       var file;
@@ -161,6 +172,18 @@ describe('B2Cloud', function() {
       }).then(function(res) {
         expect(res.fileId).to.eql(file.fileId);
         done();
+      });
+    });
+
+    it('should be able to upload and delete a file using callbacks', function(done) {
+      this.timeout(25000);
+      var file;
+      b2cloud.file.uploadFile('./test/data/backblaze-logo.gif', bucketName, function(err, upload) {
+        file = upload;
+        b2cloud.file.deleteFileVersion(upload.fileName, upload.fileId, function(err, res) {
+          expect(res.fileId).to.eql(upload.fileId);
+          done(err);
+        });
       });
     });
 
