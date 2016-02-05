@@ -197,4 +197,30 @@ File.prototype.deleteFileVersion = function(fileName, fileId, callback) {
     return bluebird.reject(err.error);
   }).asCallback(callback);
 };
+
+/**
+ * Returns all properties of a object in b2cloud.
+ *
+ * @param {string} fileId - The unique fileid to delete
+ * @param {function} [callback] - Optional callback
+ * @returns {object} - The b2_get_file_info response object.
+ */
+File.prototype.getFileInfo = function(fileId, callback) {
+  return this.Authorize.getBasicAuth().then(function(auth) {
+    var opts = {
+      url: auth.apiUrl + '/b2api/v1/b2_get_file_info',
+      headers: {
+        Authorization: auth.authorizationToken
+      },
+      body: {
+        fileId: fileId
+      },
+      json: true,
+      method: 'POST'
+    };
+    return rp(opts);
+  }).catch(function(err) {
+    return bluebird.reject(err.error);
+  }).asCallback(callback);
+};
 module.exports = File;

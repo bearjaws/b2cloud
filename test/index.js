@@ -164,7 +164,7 @@ describe('B2Cloud', function() {
     });
 
     it('should be able to upload and delete a file', function(done) {
-      this.timeout(25000);
+      this.timeout(35000);
       var file;
       return b2cloud.file.uploadFile('./test/data/backblaze-logo.gif', bucketName).then(function(res) {
         file = res;
@@ -172,11 +172,47 @@ describe('B2Cloud', function() {
       }).then(function(res) {
         expect(res.fileId).to.eql(file.fileId);
         done();
+      }).catch(function(err) {
+        console.log(err);
+        done();
+      });
+    });
+
+    it('should be able to get information about a file', function(done) {
+      this.timeout(35000);
+      var file;
+      return b2cloud.file.uploadFile('./test/data/backblaze-logo.gif', bucketName).then(function(res) {
+        file = res;
+      }).then(function(res) {
+        return b2cloud.file.getFileInfo(file.fileId);
+      }).then(function(res) {
+        expect(res.contentSha1).to.eql('29c4a53c491737d82688bbe0c1d27829d0adbdd5');
+        expect(res.contentType).to.eql('image/gif');
+        expect(res.fileName).to.eql('backblaze-logo.gif');
+        return b2cloud.file.deleteFileVersion(file.fileName, file.fileId);
+      }).then(function() {
+        done();
+      });
+    });
+
+    it('should be able to get information about a file using a callback', function(done) {
+      this.timeout(35000);
+      var file;
+      return b2cloud.file.uploadFile('./test/data/backblaze-logo.gif', bucketName).then(function(res) {
+        file = res;
+        b2cloud.file.getFileInfo(file.fileId, function(err, res) {
+          expect(res.contentSha1).to.eql('29c4a53c491737d82688bbe0c1d27829d0adbdd5');
+          expect(res.contentType).to.eql('image/gif');
+          expect(res.fileName).to.eql('backblaze-logo.gif');
+          b2cloud.file.deleteFileVersion(file.fileName, file.fileId, function(err, res) {
+            done();
+          });
+        });
       });
     });
 
     it('should be able to upload and delete a file using callbacks', function(done) {
-      this.timeout(25000);
+      this.timeout(35000);
       var file;
       b2cloud.file.uploadFile('./test/data/backblaze-logo.gif', bucketName, function(err, upload) {
         file = upload;
@@ -188,7 +224,7 @@ describe('B2Cloud', function() {
     });
 
     it('should be able to upload, download and delete a file', function(done) {
-      this.timeout(25000);
+      this.timeout(100000);
       var file;
       var fs = require('fs');
       return b2cloud.file.uploadFile('./test/data/backblaze-logo.gif', bucketName).then(function(res) {
