@@ -200,18 +200,14 @@ describe('B2Cloud', function() {
       var file;
       return b2cloud.file.uploadFile('./test/data/backblaze-logo.gif', bucketName).then(function(res) {
         file = res;
-      }).then(function(res) {
         b2cloud.file.getFileInfo(file.fileId, function(err, res) {
-
+          expect(res.contentSha1).to.eql('29c4a53c491737d82688bbe0c1d27829d0adbdd5');
+          expect(res.contentType).to.eql('image/gif');
+          expect(res.fileName).to.eql('backblaze-logo.gif');
+          b2cloud.file.deleteFileVersion(file.fileName, file.fileId, function(err, res) {
+            done();
+          });
         });
-        return b2cloud.file.getFileInfo(file.fileId);
-      }).then(function(res) {
-        expect(res.contentSha1).to.eql('29c4a53c491737d82688bbe0c1d27829d0adbdd5');
-        expect(res.contentType).to.eql('image/gif');
-        expect(res.fileName).to.eql('backblaze-logo.gif');
-        return b2cloud.file.deleteFileVersion(file.fileName, file.fileId);
-      }).then(function() {
-        done();
       });
     });
 
