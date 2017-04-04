@@ -1,4 +1,6 @@
 # B2Cloud
+# Please note this is NOT being actively worked on, for a full JS implementation see: https://github.com/yakovkhalinsky/backblaze-b2
+
 [![Circle CI](https://circleci.com/gh/bearjaws/b2cloud/tree/master.svg?style=svg)](https://circleci.com/gh/bearjaws/b2cloud/tree/master)
 ## A module for interacting with Back Blaze B2Cloud
 
@@ -24,9 +26,6 @@ i.e.
   - Range is an optional object with properties start and end i.e. { start: 0, end: 1000 }
   - Range is number of bytes (inclusive) that will be downloaded
   - See b2 documentation https://www.backblaze.com/b2/docs/b2_download_file_by_name.html
-
-## Please note this is being actively worked on and will soon support all API operations as listed here:
-https://www.backblaze.com/b2/docs/
 
 I also will be adding helpers methods such as uploadFile, getBucketByName to make it easier to use
 
